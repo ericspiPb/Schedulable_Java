@@ -116,6 +116,14 @@ public class FileLogUtil {
     return this;
   }
 
+  /**
+   * Get the java.io.File for other purpose
+   * FIXME: e.printStackTrace() with file does not work with this function propertly
+   * 
+   * @param logLevel DEBUG or ERROR in the static value of class is provided
+   * @return File file under predefined log level
+   * @throws FileNotFoundException thrown if the logLevel param is not defined
+   */
   public File getLogFile(String logLevel) throws FileNotFoundException {
     String folder = ".";
     switch(logLevel) {
@@ -133,6 +141,7 @@ public class FileLogUtil {
   }
 
   /**
+   * Get specify file in the folder path. Both folder and filename will be created if does not exists
    * 
    * @param foldername path/to/
    * @param filename filename with extension

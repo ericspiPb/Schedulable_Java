@@ -16,7 +16,5 @@ import me.synology.eric88.schedules.schedulable.utils.*;
 public class Library {
   // FIXME: remove this. It is designed for testing purposes
   public static void main(String[] args) {
-    ConfigUtil config = new ConfigUtil();
-    System.out.println(config.getConfig("key") == "value");
   }
 }
