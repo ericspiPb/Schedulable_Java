@@ -1,8 +1,10 @@
 package me.synology.eric88.schedules.schedulable.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.NullPointerException;
 import java.lang.SecurityException;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
@@ -12,8 +14,11 @@ import java.time.LocalDateTime;
  * File Utils is designed for error log and debug log with simple java built in functions
  */
 public class FileLogUtil {
-  private String debugFolder;
-  private String errorFolder;
+  public static final String DEBUG = "DEBUG";
+  public static final String ERROR = "ERROR";
+
+  private String debugFolderName;
+  private String errorFolderName;
   private String filename;
 
   /**
@@ -46,32 +51,27 @@ public class FileLogUtil {
   /**
    * Using difference debug, error folder and filename for logging message
    * 
-   * @param debugFolder path/to/debug folder name
-   * @param errorFolder path/to/error folder name
+   * @param debugFolderName path/to/debug folder name
+   * @param errorFolderName path/to/error folder name
    * @param filename filename logging message
    */
-  public FileLogUtil(String debugFolder, String errorFolder, String filename) {
-    this.setDebugFolder(debugFolder);
-    this.setErrorFolder(errorFolder);
+  public FileLogUtil(String debugFolderName, String errorFolderName, String filename) {
+    this.setDebugFolderName(debugFolderName);
+    this.setErrorFolderName(errorFolderName);
     this.setFilename(filename);
   }
 
   /**
    * Write messge to log file with specified format 
    * LocalDateTime log message\n
-   * @param folder path/to/ i.e. "C:/path/to/folder" or "./folder" it will make directories if does not exists
+   * @param foldername path/to/ i.e. "C:/path/to/folder" or "./folder" it will make directories if does not exists
    * @param filename filename in folder normally yyyy-MM-dd.log
    * @param message the message to append
    * @throws SecurityException thrown if does not have permission to write file
    * @throws IOException thrown if other error
    */
-  private void writeLog(String folder, String filename, String message) throws SecurityException, IOException {
-    // Create folders
-    File folders = new File(folder);
-    folders.mkdirs();
-
-    // Create log file
-    File log = new File(folders + "/" + this.getFilename());
+  private void writeLog(String foldername, String filename, String message) throws SecurityException, IOException {
+    File log = this.getFolderFileCreateIfNeeded(foldername, filename);
 
     // append header message in format yyyy-MM-ddTHH:mm:ss.
     DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
@@ -89,7 +89,7 @@ public class FileLogUtil {
    */
   public FileLogUtil addDebugLog(String message) {
     try {
-      this.writeLog(this.getDebugFolder(), this.getFilename(), message);
+      this.writeLog(this.getDebugFolderName(), this.getFilename(), message);
     } catch (SecurityException se) {
       se.printStackTrace();
     } catch (IOException io) {
@@ -106,7 +106,7 @@ public class FileLogUtil {
    */
   public FileLogUtil addErrorLog(String message) {
     try {
-      this.writeLog(this.getErrorFolder(), this.getFilename(), message);
+      this.writeLog(this.getErrorFolderName(), this.getFilename(), message);
     } catch (SecurityException se) {
       se.printStackTrace();
     } catch (IOException io) {
@@ -116,20 +116,53 @@ public class FileLogUtil {
     return this;
   }
 
-  public String getDebugFolder() {
-    return debugFolder;
+  public File getLogFile(String logLevel) throws FileNotFoundException {
+    String folder = ".";
+    switch(logLevel) {
+      case FileLogUtil.DEBUG:
+        folder = this.getDebugFolderName();
+        break;
+      case FileLogUtil.ERROR:
+        folder = this.getErrorFolderName();
+        break;
+      default:
+        throw new FileNotFoundException("log level is invalid");
+    }
+
+    return this.getFolderFileCreateIfNeeded(folder, this.getFilename());
   }
 
-  public void setDebugFolder(String debugFolder) {
-    this.debugFolder = debugFolder;
+  /**
+   * 
+   * @param foldername path/to/
+   * @param filename filename with extension
+   * @return File
+   */
+  public File getFolderFileCreateIfNeeded(String foldername, String filename) {
+    // Create folders
+    File folder = new File(foldername);
+    folder.mkdirs();
+
+    // Create log file
+    File log = new File(folder + "/" + this.getFilename());
+
+    return log;
   }
 
-  public String getErrorFolder() {
-    return errorFolder;
+  public String getDebugFolderName() {
+    return debugFolderName;
   }
 
-  public void setErrorFolder(String errorFolder) {
-    this.errorFolder = errorFolder;
+  public void setDebugFolderName(String debugFolderName) {
+    this.debugFolderName = debugFolderName;
+  }
+
+  public String getErrorFolderName() {
+    return errorFolderName;
+  }
+
+  public void setErrorFolderName(String errorFolderName) {
+    this.errorFolderName = errorFolderName;
   }
 
   public String getFilename() {

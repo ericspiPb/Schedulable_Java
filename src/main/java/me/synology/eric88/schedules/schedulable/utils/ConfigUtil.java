@@ -1,24 +1,36 @@
 package me.synology.eric88.schedules.schedulable.utils;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.util.Properties;
 
 public class ConfigUtil {
-  public void createConfigFile(String fileName) throws FileNotFoundException {
-    Properties prop = new Properties();
-  
-    InputStream inputStream = getClass().getResourceAsStream(fileName);
-    if (inputStream != null) {
-      try {
-        prop.load(inputStream);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    } else {
-      throw new FileNotFoundException("property file '" + fileName + "' not found in the classpath");
+  private Properties properties;
+
+  public ConfigUtil() {
+    this("config.properties");
+  }
+
+  public ConfigUtil(String configFileName) {
+    try {
+      properties = new Properties();
+      InputStream configInputStream = this.getClass().getClassLoader().getResourceAsStream(configFileName);
+      properties.load(configInputStream);
+      configInputStream.close();
+    } catch (NullPointerException nf) {
+      FileLogUtil log = new FileLogUtil();
+      log.addErrorLog(configFileName + " does not exist");
+    } catch (IOException io) {
+      FileLogUtil log = new FileLogUtil();
+      log.addErrorLog(io.getMessage());
     }
+  }
+
+  public String getConfig(String key) {
+    return this.properties.getProperty(key);
+  }
+
+  public String getConfig(String key, String defaultValue) {
+    return this.properties.getProperty(key, defaultValue);
   }
 }

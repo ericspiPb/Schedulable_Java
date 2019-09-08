@@ -7,7 +7,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import me.synology.eric88.schedules.schedulable.utils.FileLogUtil;
+import me.synology.eric88.schedules.schedulable.utils.*;
 
 /**
  * @package me.synology.eric88
@@ -16,5 +16,7 @@ import me.synology.eric88.schedules.schedulable.utils.FileLogUtil;
 public class Library {
   // FIXME: remove this. It is designed for testing purposes
   public static void main(String[] args) {
+    ConfigUtil config = new ConfigUtil();
+    System.out.println(config.getConfig("key") == "value");
   }
 }
