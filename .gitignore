@@ -6,3 +6,21 @@ build
 
 # Mac file
 .DS_Store
+
+# Ignore classes build directory
+bin/
+
+# Ignore java dependencies
+.classpath
+
+# Ignore vscode setting
+.settings
+
+# Ignore vscode debug setting directory
+.vscode/
+
+# Ignore vscode project settings
+.project
+
+# Ignore log util log directory
+logs/

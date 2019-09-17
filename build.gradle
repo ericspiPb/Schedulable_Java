@@ -9,7 +9,6 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
-    id 'application' // FIXME: remove after developed
 }
 
 repositories {
@@ -27,11 +26,4 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
-
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-}
-
-// FIXME: remove after developed
-application {
-    mainClassName = 'me.synology.eric88.schedules.schedulable.Library'
 }
