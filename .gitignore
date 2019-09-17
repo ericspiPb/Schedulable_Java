@@ -13,8 +13,8 @@ bin/
 # Ignore java dependencies
 .classpath
 
-# Ignore vscode setting
-.settings
+# Ignore vscode setting directory
+.settings/
 
 # Ignore vscode debug setting directory
 .vscode/
@@ -22,5 +22,5 @@ bin/
 # Ignore vscode project settings
 .project
 
-# Ignore log util log directory
+# Ignore LogUtil directory
 logs/

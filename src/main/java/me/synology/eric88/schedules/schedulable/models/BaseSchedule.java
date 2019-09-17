@@ -1,48 +1,29 @@
 package me.synology.eric88.schedules.schedulable.models;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.time.LocalDate;
 
-import me.synology.eric88.schedules.schedulable.interfaces.Schedulable;
+public abstract class BaseSchedule extends BaseModel {
+  protected String status;
+  protected LocalDate scheduledAt;
 
-public class BaseSchedule implements Schedulable {
-  private String tableName;
-  private String scheduleTableName;
-  private String logTableName;
-
-  private UUID tableId;
-  private LocalDateTime createAt;
-  private LocalDateTime updateAt;
-
-  public BaseSchedule(Schedulable schedulable) {
-    this.tableName = schedulable.getClass().getSimpleName();
-    this.scheduleTableName = schedulable.getClass().getSimpleName() + "_schedules";
-    this.logTableName = schedulable.getClass().getSimpleName() + "_logs";
+  public BaseSchedule(String status, LocalDate scheduledAt) {
+    this.setStatus(status);
+    this.setScheduledAt(scheduledAt);
   }
 
-  @Override
-  public Schedulable addSchedule(String sql, String log) {
-    // TODO Auto-generated method stub
-    return null;
+  public String getStatus() {
+    return status;
   }
 
-  @Override
-  public Boolean removeSchedule(String uuid) {
-    // TODO Auto-generated method stub
-    return null;
+  public void setStatus(String status) {
+    this.status = status;
   }
 
-  public String getTableName() {
-    return this.tableName;
+  public LocalDate getScheduledAt() {
+    return scheduledAt;
   }
 
-  @Override
-  public String getScheduleTableName() {
-    return scheduleTableName;
-  }
-
-  @Override
-  public String getLogTableName() {
-    return logTableName;
+  public void setScheduledAt(LocalDate scheduledAt) {
+    this.scheduledAt = scheduledAt;
   }
 }
